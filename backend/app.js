@@ -8,3 +8,32 @@ const cookieParser = require('cookie-parser');
 
 const { environment } = require('./config');
 const isProduction = environment === 'production';
+
+const app = express();
+
+app.use(morgan('dev'));
+
+app.use(cookieParser());
+app.use(express.json());
+
+/*Enable CORS in development */
+if (!isProduction) {
+    app.use(cors());
+}
+
+app.use(
+    helmet.crossOriginResourcePolicy({
+        policy: "cross-origin"
+    })
+);
+
+/*Set CSRF token */
+app.use(
+    csurf({
+        cookie: {
+            secure: isProduction,
+            sameSite: isProduction && 'lax',
+            httpOnly: true
+        }
+    })
+);
