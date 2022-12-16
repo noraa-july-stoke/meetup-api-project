@@ -1,7 +1,14 @@
 const router = require('express').Router();
+const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth.js');
+const { User } = require('../../db/models');
 
-router.post('/test', function (req, res) {
-    res.json({ requestBody: req.body });
-});
+// This should be before any other route handlers or middleware
+router.use(restoreUser);
+
+
+
+
+
+
 
 module.exports = router;
