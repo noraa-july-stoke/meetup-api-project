@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     validatePassword(password) {
-      return bcrypt.compareSync(password, this.hashedPassword.toString)
+      return bcrypt.compareSync(password, this.hashedPassword.toString())
     }
     //static methods
 
