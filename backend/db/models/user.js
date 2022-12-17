@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
         email,
         hashedPassword
       });
-      return await User.scope('currentUser'.findByPk(user.id));
+      return await User.scope('currentUser').findByPk(user.id);
     }
 
     static associate(models) {
@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
         len: [3,256],
-        isEmail: true
+        isEmail: true,
       }
     },
     hashedPassword: {

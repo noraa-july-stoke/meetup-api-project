@@ -19,7 +19,7 @@ const router = express.Router();
 //----------------------------------------------------------
 
 
-//Login route-----------------------------------------------
+//|Login route| --------------------------------------------
 router.post('/', async (req, res, next) => {
     const { credential, password } = req.body;
 
@@ -39,10 +39,8 @@ router.post('/', async (req, res, next) => {
         user
     });
 });
-//----------------------------------------------------------
 
-//Logout route
-
+//|Logout route| ---------------------------------------------
 router.delete('/', (_req, res) => {
     res.clearCookie('token');
     return res.json({message: 'success'})
