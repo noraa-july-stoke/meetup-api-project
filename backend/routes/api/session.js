@@ -18,6 +18,17 @@ const router = express.Router();
 //Route Handlers/Routers/Intra-Route Middleware
 //----------------------------------------------------------
 
+//|Get Session User Route| ---------------------------------
+router.get('/', restoreUser, async (req, res) => {
+    const { user } = req;
+    if(user) {
+        return res.json({
+            user: user.toSafeObject()
+        });
+    } else return res.json({user: null})
+});
+
+
 
 //|Login route| --------------------------------------------
 router.post('/', async (req, res, next) => {
