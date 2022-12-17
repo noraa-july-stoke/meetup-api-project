@@ -18,6 +18,8 @@ const router = express.Router();
 //Route Handlers/Routers/Intra-Route Middleware
 //----------------------------------------------------------
 
+
+//Login route-----------------------------------------------
 router.post('/', async (req, res, next) => {
     const { credential, password } = req.body;
 
@@ -36,6 +38,14 @@ router.post('/', async (req, res, next) => {
     return res.json({
         user
     });
+});
+//----------------------------------------------------------
+
+//Logout route
+
+router.delete('/', (_req, res) => {
+    res.clearCookie('token');
+    return res.json({message: 'success'})
 });
 
 module.exports = router;
