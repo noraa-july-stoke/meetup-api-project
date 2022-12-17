@@ -56,7 +56,15 @@ router.post('/', validateLogin, async (req, res, next) => {
 
     await setTokenCookie(res, user);
 
-    return res.json({ user });
+    return res.json({
+        user: {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            userName: user.username
+        }
+    });
 });
 
 //|Logout route| ---------------------------------------------

@@ -41,13 +41,21 @@ const validateSignup = [
 
 //|Signup route| -------------------------------------------
 router.post('/', validateSignup, async (req, res) => {
-    const { email, password, username } = req.body;
-    const user = await User.signup({ email, username, password });
+    const { firstName, lastName, email, password, username } = req.body;
+    const user = await User.signup({ firstName, lastName, email, username, password });
 
     // utility function adds jwt token to response object
     await setTokenCookie(res, user)
 
-    return res.json({user});
+    return res.json({
+        user:{
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            userName: user.username
+        }
+    });
 });
 
 
