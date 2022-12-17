@@ -4,15 +4,25 @@
 const express = require('express');
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
+const { check } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
-//----------------------------------------------------------
-// Pre-Route Middleware
-//----------------------------------------------------------
+//|Middleware Definitions|-----------------------------------
 
-
-
+//Check function checks specified key, chained methods tell it
+//specifically what to check for with passed in options object
+const validateLogin = [
+    check('credential')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage('Please provide a valid email or username.'),
+    check('password')
+        .exists({ checkFalsy: true })
+        .withMessage('Please provide a password.'),
+    handleValidationErrors
+];
 
 //----------------------------------------------------------
 //Route Handlers/Routers/Intra-Route Middleware
@@ -21,17 +31,17 @@ const router = express.Router();
 //|Get Session User Route| ---------------------------------
 router.get('/', restoreUser, async (req, res) => {
     const { user } = req;
-    if(user) {
+    if (user) {
         return res.json({
             user: user.toSafeObject()
         });
-    } else return res.json({user: null})
+    } else return res.json({ user: null })
 });
 
 
 
 //|Login route| --------------------------------------------
-router.post('/', async (req, res, next) => {
+router.post('/', validateLogin, async (req, res, next) => {
     const { credential, password } = req.body;
 
     const user = await User.login({ credential, password });
@@ -46,15 +56,13 @@ router.post('/', async (req, res, next) => {
 
     await setTokenCookie(res, user);
 
-    return res.json({
-        user
-    });
+    return res.json({ user });
 });
 
 //|Logout route| ---------------------------------------------
 router.delete('/', (_req, res) => {
     res.clearCookie('token');
-    return res.json({message: 'success'})
+    return res.json({ message: 'success' })
 });
 
 module.exports = router;
