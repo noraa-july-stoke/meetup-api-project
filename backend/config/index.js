@@ -1,5 +1,5 @@
 module.exports = {
-    environment: process.env.NODE_ENV || 'developoment',
+    environment: process.env.NODE_ENV || 'development',
     port: process.env.PORT || 8000,
     url: process.env.DB_FILE,
     jwtConfig: {
@@ -10,6 +10,7 @@ module.exports = {
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        host: process.env.DB_HOST
+        host: process.env.DB_HOST,
+        schema: process.env.SCHEMA
     }
 };
