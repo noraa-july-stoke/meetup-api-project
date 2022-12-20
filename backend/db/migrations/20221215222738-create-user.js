@@ -2,8 +2,10 @@
 /** @type {import('sequelize-cli').Migration} */
 
 
+// options.schema = process.env.SCHEMA;  // define your schema in options object
 let options = {};
 options.schema = process.env.SCHEMA;  // define your schema in options object
+options.tableName = "Users";
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -47,14 +49,10 @@ module.exports = {
           type: Sequelize.DATE,
           defaultValue: Sequelize.literal("CURRENT_TIMESTAMP")
         }
-      },
-      {
-        schema: "meetup_schema"
-      });
+      }, options)
     });
 },
   async down(queryInterface, Sequelize) {
-    options.tableName = "Users";
     await queryInterface.dropTable(options, options);
   }
 };
