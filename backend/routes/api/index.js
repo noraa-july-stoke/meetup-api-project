@@ -5,6 +5,7 @@ const { setTokenCookie, restoreUser, requireAuth } = require('../../utils/auth.j
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
+const groupsRouter = require('./groups.js')
 
 //----------------------------------------------------------
 // Pre-Route Middleware
@@ -14,13 +15,12 @@ const usersRouter = require('./users.js');
 // This should be before any other route handlers or middleware
 router.use(restoreUser);
 
-
-
 //----------------------------------------------------------
 //Route Handlers/Routers/Intra-Route Middleware
 //----------------------------------------------------------
 router.use('/session', sessionRouter);
 router.use('/users', usersRouter);
+router.use('/groups', groupsRouter);
 
 //|test route| ---------------------------------------------
 router.post('/test', (req, res) => {

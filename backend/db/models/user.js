@@ -47,10 +47,33 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     static associate(models) {
-      // define association here
+
+      User.hasMany(models.Attendance, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        hooks: true
+      });
+
+      User.hasMany(models.Membership, {
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+        hooks: true
+      });
+
+      User.hasMany(models.Group, {
+        foreignKey: 'organizerId',
+        onDelete: 'CASCADE',
+        hooks: true
+      });
     }
   }
   User.init({
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false
@@ -88,10 +111,12 @@ module.exports = (sequelize, DataTypes) => {
         len: [60,60]
       }
     }
-  }, {
+  },
+  { //options object
     sequelize,
     modelName: 'User',
     schema: process.env.SCHEMA,
+    //scopes
     defaultScope: {
       attributes: {
         exclude: ["hashedPassword", "email", "createdAt", "updatedAt"]

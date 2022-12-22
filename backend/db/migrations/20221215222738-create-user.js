@@ -1,8 +1,5 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
-
-
-// options.schema = process.env.SCHEMA;  // define your schema in options object
+//postgres options configuration
 let options = {};
 options.schema = process.env.SCHEMA;  // define your schema in options object
 options.tableName = "Users";
