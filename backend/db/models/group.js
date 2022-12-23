@@ -10,25 +10,25 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Group.hasMany(models.Event, {
-        foreignkey: 'groupId',
+        foreignKey: 'groupId',
         onDelete: 'CASCADE',
         hooks: true
       });
 
       Group.hasMany(models.Venue, {
-        foreignkey: 'groupId',
+        foreignKey: 'groupId',
         onDelete: 'CASCADE',
         hooks: true
       });
 
       Group.hasMany(models.Membership, {
-        foreignkey: 'groupId',
+        foreignKey: 'groupId',
         onDelete: 'CASCADE',
         hooks: true
       });
 
       Group.hasMany(models.GroupImage, {
-        foreignkey: 'groupId',
+        foreignKey: 'groupId',
         onDelete: 'CASCADE',
         hooks: true
       });
@@ -61,14 +61,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [1,1000]
+        len: [50,1000],
       }
     },
     type: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: ['In Person', 'Online']
+        isIn: ['In person', 'Online']
       }
     },
     private: {

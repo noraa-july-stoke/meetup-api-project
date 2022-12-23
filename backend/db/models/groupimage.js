@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'GroupImage',
-    schema: process.env.schema
+    schema: process.env.SCHEMA
   });
   return GroupImage;
 };

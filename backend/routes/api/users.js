@@ -7,44 +7,35 @@
 
 const express = require('express');
 const  { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { handleValidationErrors } = require('../../utils/validation');
+const { handleValidationErrors, validateSignup } = require('../../utils/validation');
 const { User } = require('../../db/models');
-const { check } = require('express-validator');
 const router = express.Router();
-const { application } = require('express');
-const { Op } = require('sequelize');
-
-
-//|Middleware Definitions| ---------------------------------
-
-const validateSignup = [
-    check('email')
-        .exists({ checkFalsy: true })
-        .isEmail()
-        .withMessage('Please provide a valid email.'),
-    check('username')
-        .exists({ checkFalsy: true })
-        .isLength({ min: 4 })
-        .withMessage('Please provide a username with at least 4 characters.'),
-    check('username')
-        .not()
-        .isEmail()
-        .withMessage('Username cannot be an email.'),
-    check('password')
-        .exists({ checkFalsy: true })
-        .isLength({ min: 6 })
-        .withMessage('Password must be 6 characters or more.'),
-    handleValidationErrors
-];
-
-
+const validator = require('validator')
 //|Route Handlers/Routers/Intra-Route Middleware| ----------
 
 
 //|Signup route| -------------------------------------------
 router.post('/', validateSignup, async (req, res) => {
     const { firstName, lastName, email, password, username } = req.body;
+    const err = new Error()
+    err.message = "Validation error";
+    err.errors = {};
+    if (!firstName) err.errors.firstName = "First Name is required";
+    if (!lastName) err.errors.lastName = "Last Name is required";
+    if (!validator.isEmail(email)) err.errors.email = "Invalid email"
+    if (Object.keys(err.errors).length) {
+        return res.status(400).send(err);
+    }
+
     const user = await User.signup({ firstName, lastName, email, username, password });
+
+    if (!user) return res.status(400).send({
+        "message": "User already exists",
+        "statusCode": 403,
+        "errors": {
+            "email": "User with that email already exists"
+        }
+    });
 
     // utility function adds jwt token to response object
     await setTokenCookie(res, user)

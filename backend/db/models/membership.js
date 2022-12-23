@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       Membership.belongsTo(models.User, {
-        foreignKey: 'UserId'
+        foreignKey: 'userId'
       });
 
     }

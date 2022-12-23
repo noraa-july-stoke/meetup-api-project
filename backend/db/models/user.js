@@ -36,6 +36,8 @@ module.exports = (sequelize, DataTypes) => {
 
     static async signup({username, firstName, lastName, email, password}) {
       const hashedPassword = bcrypt.hashSync(password);
+      const exists = await User.findOne({where: {email}})
+      if (exists) return false;
       const user = await User.create({
         firstName,
         lastName,
