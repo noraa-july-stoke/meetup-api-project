@@ -3,6 +3,10 @@
 let options = {};
 options.schema = process.env.SCHEMA;  // define your schema in options object
 options.tableName = "Memberships";
+options.indexes = [{
+    unique: true,
+    fields: ['userId', 'groupId']
+  }]
 
 module.exports = {
   async up(queryInterface, Sequelize) {

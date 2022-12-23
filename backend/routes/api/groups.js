@@ -52,7 +52,21 @@ router.get('/', async (req, res) => {
     res.json({Groups:[...groups]});
 });
 
+// //|Get groups organized by current user| --------------------------------------------------
 
+router.get('/current', requireAuth, async (req, res) => {
+    const id =req.user.id;
+
+    const membershipData = await Membership.findAll({
+        where: {userId: id, status: 'co-host' || 'pending'}
+    });
+
+    const groupsList = await Group.findAll({
+        where: {organizerId:id},
+    });
+    res.json({groupsList, membershipData})
+
+});
 
 //|Get Group From Id| -------------------------------------------
 
@@ -79,16 +93,17 @@ router.get('/:groupId', async (req, res) => {
     res.json(group)
 });
 
+
+//|Create A Group| ---------------------------------------------------
 router.post('/', requireAuth, async (req, res) => {
     const { name, about, type, private, city, state } = req.body;
     const groupData = { name, about, type, private, city, state };
     groupData.organizerId = req.user.id;
 
-
     const newGroup = Group.build(groupData);
 
     await newGroup.save();
-
+    await Membership.create({userId:newGroup.organizerId, groupId:newGroup.id, status: 'co-host'});
     res.json(newGroup);
 
 });
